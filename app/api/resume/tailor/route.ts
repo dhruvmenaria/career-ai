@@ -74,6 +74,10 @@ export async function POST(req: NextRequest) {
     );
     const result = safeParseJSON<TailoredResumeResult>(tailorRaw);
 
+    // Normalize scores — AI sometimes returns 0-1 range instead of 0-100
+    if (result.atsScoreBefore <= 1) result.atsScoreBefore = Math.round(result.atsScoreBefore * 100);
+    if (result.atsScoreAfter <= 1) result.atsScoreAfter = Math.round(result.atsScoreAfter * 100);
+
     // Persist session to DB
     const session = await prisma.resumeSession.create({
       data: {

@@ -62,7 +62,7 @@ export default async function ResumePage() {
                         <FileText className="h-5 w-5 text-primary" />
                       </div>
                       <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-                        +{improvement} pts
+                        +{Math.round(improvement)} pts
                       </span>
                     </div>
                     <div>
@@ -70,7 +70,7 @@ export default async function ResumePage() {
                         {session.title}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        ATS {session.atsScoreBefore ?? 0} → {session.atsScoreAfter ?? 0}
+                        ATS {Math.round(session.atsScoreBefore ?? 0)} → {Math.round(session.atsScoreAfter ?? 0)}
                       </p>
                     </div>
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-auto">

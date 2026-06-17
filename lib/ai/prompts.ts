@@ -50,8 +50,8 @@ STRICT RULES:
 Return ONLY valid JSON, no markdown:
 {
   "tailoredResume": { (same structure as input resume) },
-  "atsScoreBefore": number,
-  "atsScoreAfter": number,
+  "atsScoreBefore": number between 0 and 100 (integer, e.g. 60),
+  "atsScoreAfter": number between 0 and 100 (integer, e.g. 85),
   "keywordMatches": { "matched": string[], "missing": string[] },
   "changesExplanation": string[]
 }

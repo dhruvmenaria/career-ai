@@ -30,7 +30,7 @@ function ScoreRing({ score, label }: { score: number; label: string }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-xl font-bold">{score}</span>
+          <span className="text-xl font-bold">{Math.round(score)}</span>
           <span className="text-[9px] text-muted-foreground">/100</span>
         </div>
       </div>
@@ -62,7 +62,7 @@ export function ATSScoreCard({ scoreBefore, scoreAfter, keywordMatches, changesE
                   improvement >= 0 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-rose-100 text-rose-700"
                 )}
               >
-                {improvement >= 0 ? "+" : ""}{improvement} pts
+                {improvement >= 0 ? "+" : ""}{Math.round(improvement)} pts
               </div>
               <p className="mt-1 text-xs text-muted-foreground">improvement</p>
             </div>
