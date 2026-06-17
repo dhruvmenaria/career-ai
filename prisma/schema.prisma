@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                    String             @id @default(cuid())
+  clerkId               String             @unique
+  email                 String             @unique
+  name                  String?
+  createdAt             DateTime           @default(now())
+
+  // Stripe billing fields
+  stripeCustomerId      String?            @unique
+  stripePriceId         String?
+  stripeSubId           String?
+  subStatus             String?            @default("free") // "free" | "active" | "canceled"
+  subCurrentPeriodEnd   DateTime?
+
+  jobs              Job[]
+  resumeSessions    ResumeSession[]
+  interviewSessions InterviewSession[]
+}
+
+model Job {
+  id                String             @id @default(cuid())
+  userId            String
+  user              User               @relation(fields: [userId], references: [id])
+  title             String
+  company           String
+  description       String             @db.Text
+  status            JobStatus          @default(SAVED)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  resumeSessions    ResumeSession[]
+  interviewSessions InterviewSession[]
+}
+
+model ResumeSession {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  jobId           String?
+  job             Job?     @relation(fields: [jobId], references: [id])
+  title           String
+  originalResume  String   @db.Text
+  tailoredResume  String?  @db.Text
+  atsScoreBefore  Int?
+  atsScoreAfter   Int?
+  keywordMatches  Json?
+  pdfUrl          String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model InterviewSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  jobId     String?
+  job       Job?     @relation(fields: [jobId], references: [id])
+  jobTitle  String
+  jobDesc   String   @db.Text
+  topics    Json
+  questions Json
+  readiness Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum JobStatus {
+  SAVED
+  APPLIED
+  INTERVIEWING
+  OFFERED
+  REJECTED
+}
